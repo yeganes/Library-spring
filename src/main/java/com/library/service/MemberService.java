@@ -1,8 +1,9 @@
 package com.library.service;
 
 
+import com.library.dao.BorrowDAO;
 import com.library.exceptions.MemberNotFoundException;
-import com.library.model.Member;
+import com.library.entity.Member;
 import com.library.dao.MemberDAO;
 
 import java.io.*;
@@ -20,6 +21,7 @@ public class MemberService {
     public static ArrayList<Member> listPerson = new ArrayList<>();
     public static Integer borrowLimit = 2;
     public static Integer borrowedBooks = 0;
+    public static boolean isActive = true;
 
     public Member create(String inputName , int inputAge , String inputPhoneNumber , Member.Gender gender) throws IOException {
 
@@ -33,7 +35,7 @@ public class MemberService {
         int id = 0 ;
         id ++;
 
-        person = new Member( inputName, inputAge, inputPhoneNumber, gender,borrowLimit );
+        person = new Member( inputName, inputAge, inputPhoneNumber, gender,borrowLimit , borrowedBooks , isActive);
 
         listPerson.add(person);
 
@@ -104,6 +106,7 @@ public class MemberService {
         else {
             if (number == 1 ){
                 memberDAO.delete(enteredId);
+
             } else if (number == 2 ) {
                 return m;
             }

@@ -1,7 +1,7 @@
 package com.library.service;
 
 
-import com.library.model.Book;
+import com.library.entity.Book;
 import com.library.dao.BookDAO;
 
 import java.util.ArrayList;

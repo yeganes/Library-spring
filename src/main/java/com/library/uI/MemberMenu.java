@@ -10,13 +10,12 @@ import com.library.dao.MemberDAO;
 import com.library.service.BookService;
 import com.library.service.LibraryService;
 import com.library.service.MemberService;
-import com.library.model.Member;
-import com.library.model.Book;
-import com.library.model.Borrow;
+import com.library.entity.Member;
+import com.library.entity.Book;
+import com.library.entity.Borrow;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
