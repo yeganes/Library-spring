@@ -87,7 +87,7 @@ public class Member {
         this.age = age;
     }
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "phone_number", nullable = false, unique = true)
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -105,6 +105,7 @@ public class Member {
         this.borrowLimit = borrowLimit;
     }
 
+    @Column(name = "borrowed_books_num")
     public Integer getBorrowedBooksNum() {
         return borrowedBooksNum;
     }

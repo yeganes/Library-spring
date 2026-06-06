@@ -2,6 +2,7 @@ package com.library.service;
 
 
 import com.library.dao.BorrowDAO;
+import com.library.entity.Book;
 import com.library.exceptions.MemberNotFoundException;
 import com.library.entity.Member;
 import com.library.dao.MemberDAO;
@@ -100,6 +101,9 @@ public class MemberService {
         }
         return m;
     }
+
+
+
     public Member delete(int enteredId , int number) throws MemberNotFoundException {
         if (enteredId <= 0) {
             throw new IllegalArgumentException("Invalid member ID");

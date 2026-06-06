@@ -20,17 +20,19 @@ import java.util.Scanner;
 public class MemberMenu {
 
     private final MemberService memberService ;
+    private final BookDAO bookDAO;
     MemberDAO memberDAO = new MemberDAO();
     static Scanner input = new Scanner(System.in);
     private final BookService bookService;
     private final BorrowDAO borrowDAO;
     private final LibraryService libraryService;
 
-    public MemberMenu(BookService bookService, BorrowDAO borrowDAO, LibraryService libraryService , MemberService memberService) {
+    public MemberMenu(BookService bookService, BorrowDAO borrowDAO, LibraryService libraryService , MemberService memberService, BookDAO bookDAO) {
         this.bookService = bookService;
         this.borrowDAO = borrowDAO;
         this.libraryService = libraryService;
         this.memberService = memberService;
+        this.bookDAO = bookDAO;
     }
     public void ask() throws LimitBorrowedException, MemberNotFoundException {
 
