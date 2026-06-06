@@ -6,15 +6,20 @@ package com.library.uI;
 import com.library.entity.Book;
 import com.library.dao.BookDAO;
 import com.library.service.BookService;
+import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Scanner;
-
+@Component
 public class BookMenu {
-    BookDAO bookDAO = new BookDAO();
-    BookService bookService = new BookService();
     static Scanner inputInfo = new Scanner(System.in);
+
+    private  final BookService bookService;
+
+    public BookMenu( BookService bookService) {
+        this.bookService = bookService;
+    }
 
 
     public void ask() {
@@ -93,7 +98,7 @@ public class BookMenu {
                             while(true){
                                 try{
                                     System.out.println("enter the book you are searching for : ");
-                                    List<Book> books = bookDAO.readAllBooks();
+                                    List<Book> books = bookService.getAllBooks();
                                     for (Book b : books) {
                                         System.out.println(b);
                                     }
@@ -114,11 +119,11 @@ public class BookMenu {
                             }
                             break;
                         case 2:
-                            List<Book> allBooks1 = bookDAO.readAllBooks();
+                            List<Book> books = bookService.getAllBooks();
                             while(true){
                                 try{
                                     System.out.println("search here:");
-                                    for (Book b : allBooks1){
+                                    for (Book b : books){
                                         System.out.println(b);
                                     }
                                     String prefix = inputInfo.nextLine();
@@ -131,6 +136,7 @@ public class BookMenu {
                                 }catch(NullPointerException e){
                                     System.out.println("error!" + e.getMessage());
                                 }
+                                break;
                             }
                         case 3 :
                             break;
@@ -141,7 +147,8 @@ public class BookMenu {
                 case 3:
                     System.out.println("you selected number 3 , let's update the book's status");
                     while (true) {
-                        List<Book> books = bookDAO.readAllBooks();
+                        List<Book> books = bookService.getAllBooks();
+
                         for (Book b : books){
                             System.out.println(b);
                         }
@@ -149,7 +156,7 @@ public class BookMenu {
                         try {
                             System.out.println("enter the book's ID you're going to update : ");
                             int id = Integer.parseInt(inputInfo.nextLine());
-                            Book book = bookDAO.readById(id);
+                            Book book = bookService.findById(id);
 
                             String msg = MessageFormat.format("the {0} book availability is {1} if you  wanna change it press enter",
                                     book.getTitle(),
@@ -169,13 +176,13 @@ public class BookMenu {
                     break;
                 case 4:
                     System.out.println("you selected number 4, deleting a book!");
-                    List<Book> books = bookDAO.readAllBooks();
+                    List<Book> books = bookService.getAllBooks();
                     for (Book b : books){
                         System.out.println(b);
                     }
                     System.out.println("enter the book's id:");
                     int givenID = Integer.parseInt(inputInfo.nextLine());
-                    System.out.println(bookDAO.readById(givenID));
+                    System.out.println(bookService.findById(givenID));
                     System.out.println("Do you want to delete this book? 1.yes 2.no");
                     try {
                         int choice = Integer.parseInt(inputInfo.nextLine());

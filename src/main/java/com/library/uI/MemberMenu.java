@@ -1,8 +1,5 @@
 package com.library.uI;
-
-
-
-
+import com.library.dao.BookDAO;
 import com.library.exceptions.LimitBorrowedException;
 import com.library.exceptions.MemberNotFoundException;
 import com.library.dao.BorrowDAO;
@@ -13,20 +10,27 @@ import com.library.service.MemberService;
 import com.library.entity.Member;
 import com.library.entity.Book;
 import com.library.entity.Borrow;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Scanner;
-
+@Component
 public class MemberMenu {
-    MemberService memberService = new MemberService();
+
+    private final MemberService memberService ;
     MemberDAO memberDAO = new MemberDAO();
     static Scanner input = new Scanner(System.in);
-    LibraryService libraryService = new LibraryService();
-    BookService bookService = new BookService();
-    BorrowDAO borrowDAO = new BorrowDAO();
-    public MemberMenu() {
+    private final BookService bookService;
+    private final BorrowDAO borrowDAO;
+    private final LibraryService libraryService;
+
+    public MemberMenu(BookService bookService, BorrowDAO borrowDAO, LibraryService libraryService , MemberService memberService) {
+        this.bookService = bookService;
+        this.borrowDAO = borrowDAO;
+        this.libraryService = libraryService;
+        this.memberService = memberService;
     }
     public void ask() throws LimitBorrowedException, MemberNotFoundException {
 

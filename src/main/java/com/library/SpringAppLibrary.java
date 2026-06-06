@@ -12,7 +12,10 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class SpringAppLibrary implements CommandLineRunner {
-    Menu menu = new Menu();
+    private final Menu menu;
+    public SpringAppLibrary(Menu menu){
+        this.menu = menu;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(SpringAppLibrary.class, args);

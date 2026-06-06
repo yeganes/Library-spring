@@ -6,10 +6,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class BookDAO {
+    public void print() {
+        System.out.println("Repository called");
+    }
 
     SessionFactory sessionFactory =
             HibernateUtil.getSessionFactory();

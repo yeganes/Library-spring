@@ -5,6 +5,7 @@ import com.library.dao.BorrowDAO;
 import com.library.exceptions.MemberNotFoundException;
 import com.library.entity.Member;
 import com.library.dao.MemberDAO;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,14 +15,19 @@ import java.util.List;
  * سرویس کراد ممبر ها
  */
 
-
+@Service
 public class MemberService {
-    MemberDAO memberDAO = new MemberDAO();
+    private final MemberDAO memberDAO;
+
     Member person = null;
     public static ArrayList<Member> listPerson = new ArrayList<>();
     public static Integer borrowLimit = 2;
     public static Integer borrowedBooks = 0;
     public static boolean isActive = true;
+
+    public MemberService(MemberDAO memberDAO) {
+        this.memberDAO = memberDAO;
+    }
 
     public Member create(String inputName , int inputAge , String inputPhoneNumber , Member.Gender gender) throws IOException {
 

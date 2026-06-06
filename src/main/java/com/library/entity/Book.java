@@ -67,14 +67,6 @@ public class Book {
     }
 
 
-    @Version
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     public void setBorrows(List<Borrow> borrows) {
         this.borrows = borrows;

@@ -8,15 +8,25 @@ import com.library.entity.Member;
 import com.library.dao.BookDAO;
 import com.library.dao.BorrowDAO;
 import com.library.dao.MemberDAO;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
-
+@Service
 public class LibraryService {
-    MemberService memberService = new MemberService();
-    BookService bookService = new BookService();
-    BookDAO bookDAO = new BookDAO();
-    BorrowDAO borrowDAO = new BorrowDAO();
-    MemberDAO memberDAO = new MemberDAO();
 
+    private final BookService bookService;
+    private final MemberService memberService;
+    private final BookDAO bookDAO;
+    private final BorrowDAO borrowDAO;
+    private final MemberDAO memberDAO;
+    public LibraryService(BookService bookService, MemberService memberService, BookDAO bookDAO, BorrowDAO borrowDAO, MemberDAO memberDAO){
+        this.bookService = bookService;
+        this.memberService = memberService;
+        this.bookDAO = bookDAO;
+        this.borrowDAO = borrowDAO;
+        this.memberDAO = memberDAO;
+
+    }
 
     public void borrow(int memberId, int bookId ) throws LimitBorrowedException, MemberNotFoundException {
 
