@@ -2,8 +2,9 @@ package com.library.service;
 
 
 import com.library.entity.Book;
-import com.library.repository.BookDAO;
+import com.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +13,10 @@ import java.util.List;
 public class BookService {
 
 
-    private final BookDAO bookDAO;
+    private final BookRepository bookRepository;
 
-    public BookService(BookDAO bookDAO){
-
-        this.bookDAO = bookDAO;
+    public BookService(BookRepository bookRepository){
+        this.bookRepository = bookRepository;
     }
 
 
@@ -39,14 +39,14 @@ public class BookService {
 
         }
         Book book = new Book( inputTitle, inputAuthor, inputPage,  isAvailable , bookStock);
-        bookDAO.save(book);
+        bookRepository.save(book);
         return book;
     }
     public List<Book> findExactMatch (String title){
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be null or empty");
         }
-        List<Book> allBooks = bookDAO.readByTitleContains(title);
+        List<Book> allBooks = bookRepository.findBookByTitleContaining(title);
         ArrayList<Book> result = new ArrayList<>();
 
         for (Book b : allBooks) {
@@ -65,7 +65,11 @@ public class BookService {
             throw new IllegalArgumentException("Invalid book ID");
         }
 
-        return bookDAO.readById(id);
+        return bookRepository.findBookById(id);
+    }
+
+    public List<Book> readAllBooks(){
+       return  bookRepository.findAll();
     }
 
     public List<Book> findPrefix(String preFix) {
@@ -73,7 +77,7 @@ public class BookService {
         if (preFix == null || preFix.isEmpty()) {
             throw new IllegalArgumentException("Prefix cannot be empty");
         }
-        List<Book> books =  bookDAO.readAllBooks();
+        List<Book> books =  readAllBooks();
 
         List<Book> result = new ArrayList<>(); // Separate list for results
 
@@ -98,7 +102,7 @@ public class BookService {
 
         List<Book> b = null;
 
-        b =  bookDAO.readByTitleContains(givenTitle);
+        b =  bookRepository.findBookByTitleContaining(givenTitle);
 
         if (b.isEmpty()) {
             throw new IllegalArgumentException("Book not found");            //left empty by purpose
@@ -106,31 +110,27 @@ public class BookService {
         return b;
     }
 
-    public Book update(int id, boolean chosen) {
+    public Book updateStatus(int id, boolean status) {
 
         Book book = findById(id);
-            if (chosen) {
+            if (status) {
                 if (book.isAvailable() == true) {
                     book.setAvailable(false);
-                    bookDAO.updateStatus(id , book.isAvailable());
                 } else {
                     book.setAvailable(true);
-                    bookDAO.updateStatus(id,  book.isAvailable());
+
                 }
             }
             return book;
     }
-    public List<Book> getAllBooks(){
-        return bookDAO.readAllBooks();
-    }
-    public boolean delete(int id)  {
 
-        List<Book> allBooks = bookDAO.readAllBooks();
+    @Transactional
+    public void delete(int id) {
 
-        Book book = findById(id);
-        bookDAO.delete(book.getId());
-        allBooks.remove(book);
+        if (!bookRepository.existsById(id)) {
+            throw new RuntimeException("Book not found");
+        }
 
-        return true;
+        bookRepository.deleteById(id);
     }
 }

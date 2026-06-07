@@ -5,9 +5,7 @@ import com.library.exceptions.MemberNotFoundException;
 import com.library.entity.Book;
 import com.library.entity.Borrow;
 import com.library.entity.Member;
-import com.library.repository.BookDAO;
 import com.library.repository.BorrowDAO;
-import com.library.repository.MemberDAO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +15,10 @@ public class LibraryService {
 
     private final BookService bookService;
     private final MemberService memberService;
-    private final BookDAO bookDAO;
     private final BorrowDAO borrowDAO;
-    public LibraryService(BookService bookService, MemberService memberService, BookDAO bookDAO, BorrowDAO borrowDAO){
+    public LibraryService(BookService bookService, MemberService memberService, BorrowDAO borrowDAO){
         this.bookService = bookService;
         this.memberService = memberService;
-        this.bookDAO = bookDAO;
         this.borrowDAO = borrowDAO;
     }
     @Transactional
@@ -44,8 +40,7 @@ public class LibraryService {
             book.setBookStock(book.getBookStock()-1);
 
 
-            borrowDAO.insert(member , book);
-            bookDAO.updateStock(bookId , book.getBookStock());
+
             System.out.println("the book is borrowed");
 
 
@@ -76,8 +71,6 @@ public class LibraryService {
         if (!book.isAvailable()) {
             book.setAvailable(true);
         }
-
-        bookDAO.updateStock(bookId , book.getBookStock());
         for(Borrow borrow : borrowList){
             borrowDAO.returnBook(borrow.getBorrowId());
         }

@@ -97,7 +97,7 @@ public class BookMenu {
                             while(true){
                                 try{
                                     System.out.println("enter the book you are searching for : ");
-                                    List<Book> books = bookService.getAllBooks();
+                                    List<Book> books = bookService.readAllBooks();
                                     for (Book b : books) {
                                         System.out.println(b);
                                     }
@@ -118,7 +118,7 @@ public class BookMenu {
                             }
                             break;
                         case 2:
-                            List<Book> books = bookService.getAllBooks();
+                            List<Book> books = bookService.readAllBooks();
                             while(true){
                                 try{
                                     System.out.println("search here:");
@@ -146,7 +146,7 @@ public class BookMenu {
                 case 3:
                     System.out.println("you selected number 3 , let's update the book's status");
                     while (true) {
-                        List<Book> books = bookService.getAllBooks();
+                        List<Book> books = bookService.readAllBooks();
 
                         for (Book b : books){
                             System.out.println(b);
@@ -162,7 +162,7 @@ public class BookMenu {
                                     book.isAvailable());
                             System.out.println(msg);
                             boolean chosen = inputInfo.nextLine().isEmpty();
-                            Book b = bookService.update(id, chosen);
+                            Book b = bookService.updateStatus(id, chosen);
                             System.out.println("the book availability is  " + b.isAvailable());
 
                             break;
@@ -175,7 +175,7 @@ public class BookMenu {
                     break;
                 case 4:
                     System.out.println("you selected number 4, deleting a book!");
-                    List<Book> books = bookService.getAllBooks();
+                    List<Book> books = bookService.readAllBooks();
                     for (Book b : books){
                         System.out.println(b);
                     }
@@ -186,12 +186,7 @@ public class BookMenu {
                     try {
                         int choice = Integer.parseInt(inputInfo.nextLine());
                         if (choice == 1) {
-                            boolean deleted = bookService.delete(givenID);
-                            if (deleted) {
-                                System.out.println("Book successfully deleted.");
-                            } else {
-                                System.out.println("Book not found.");
-                            }
+                           bookService.delete(givenID);
                         } else {
                             System.out.println("Deletion cancelled.");
                         }
