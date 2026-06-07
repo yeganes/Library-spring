@@ -5,7 +5,9 @@ import com.library.exceptions.MemberNotFoundException;
 import com.library.entity.Book;
 import com.library.entity.Borrow;
 import com.library.entity.Member;
-import com.library.repository.BorrowDAO;
+import com.library.repository.BookRepository;
+import com.library.repository.BorrowRepository;
+import com.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +17,16 @@ public class LibraryService {
 
     private final BookService bookService;
     private final MemberService memberService;
-    private final BorrowDAO borrowDAO;
-    public LibraryService(BookService bookService, MemberService memberService, BorrowDAO borrowDAO){
+    private final BorrowRepository borrowRepository;
+    private final MemberRepository memberRepository;
+    private final BookRepository bookRepository;
+
+    public LibraryService(BookService bookService, MemberService memberService, BorrowRepository borrowRepository , MemberRepository memberRepository , BookRepository bookRepository, com.library.service.BookRepository bookRepository){
         this.bookService = bookService;
         this.memberService = memberService;
-        this.borrowDAO = borrowDAO;
+        this.borrowRepository = borrowRepository;
+        this.memberRepository = memberRepository;
+        this.bookRepository = bookRepository;
     }
     @Transactional
     public void borrow(int memberId, int bookId ) throws LimitBorrowedException, MemberNotFoundException {
@@ -41,6 +48,10 @@ public class LibraryService {
 
 
 
+
+            memberRepository.save(member);
+            bookRepository.save(book);
+
             System.out.println("the book is borrowed");
 
 
@@ -58,7 +69,7 @@ public class LibraryService {
 
         Member member = memberService.readMemberById(memberId);
         Book book = bookService.findById(bookId);
-        List<Borrow> borrowList = borrowDAO.selectMemberBook(member , book);
+        List<Borrow> borrowList = borrowRepository.selectMemberBook(member , book);
 
 
 
@@ -72,8 +83,11 @@ public class LibraryService {
             book.setAvailable(true);
         }
         for(Borrow borrow : borrowList){
-            borrowDAO.returnBook(borrow.getBorrowId());
+            borrowRepository.returnBook(borrow.getBorrowId());
         }
+
+        memberRepository.save(member);
+        bookRepository.save(book);
     }
 
 }

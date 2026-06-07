@@ -2,7 +2,7 @@ package com.library.uI;
 
 import com.library.exceptions.LimitBorrowedException;
 import com.library.exceptions.MemberNotFoundException;
-import com.library.repository.BorrowDAO;
+import com.library.repository.BorrowRepository;
 import com.library.service.BookService;
 import com.library.service.LibraryService;
 import com.library.service.MemberService;
@@ -21,12 +21,12 @@ public class MemberMenu {
     private final MemberService memberService ;
     static Scanner input = new Scanner(System.in);
     private final BookService bookService;
-    private final BorrowDAO borrowDAO;
+    private final BorrowRepository borrowRepository;
     private final LibraryService libraryService;
 
-    public MemberMenu(BookService bookService, BorrowDAO borrowDAO, LibraryService libraryService , MemberService memberService) {
+    public MemberMenu(BookService bookService, BorrowRepository borrowRepository, LibraryService libraryService , MemberService memberService) {
         this.bookService = bookService;
-        this.borrowDAO = borrowDAO;
+        this.borrowRepository = borrowRepository;
         this.libraryService = libraryService;
         this.memberService = memberService;
     }
@@ -254,7 +254,7 @@ public class MemberMenu {
 
                         int bookId = Integer.parseInt(input.nextLine());
                         Book book = bookService.findById(bookId);
-                        List<Borrow> borrowList = borrowDAO.selectMemberBook(member ,book );
+                        List<Borrow> borrowList = borrowRepository.selectMemberBook(member ,book );
 
                         System.out.println(borrowList);
 

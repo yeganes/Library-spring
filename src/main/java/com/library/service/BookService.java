@@ -42,6 +42,8 @@ public class BookService {
         bookRepository.save(book);
         return book;
     }
+
+
     public List<Book> findExactMatch (String title){
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be null or empty");
@@ -110,6 +112,7 @@ public class BookService {
         return b;
     }
 
+    @Transactional
     public Book updateStatus(int id, boolean status) {
 
         Book book = findById(id);

@@ -6,6 +6,7 @@ import com.library.entity.Member;
 
 import com.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -64,16 +65,19 @@ public class MemberService {
         }
         return result;
     }
+
     public List<Member> readAllMembers(){
         return memberRepository.findAll();
     }
 
-    public Member readMemberById(Integer id) throws RuntimeException , MemberNotFoundException {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("Invalid member ID");
-        }
-        return memberRepository.findMemberByMemberId(id);
+    public Member readMemberById(Integer id) throws  MemberNotFoundException {
+        Member member = memberRepository.findMemberByMemberId(id);
 
+        if (member == null) {
+            throw new MemberNotFoundException("member not found");
+        }
+
+        return member;
     }
 
     public void updateName (Integer id , String name){
@@ -84,6 +88,8 @@ public class MemberService {
 
         if (name != null && !name.isEmpty()){
             member.setName(name);
+            memberRepository.save(member);
+
 
 
         }
@@ -96,9 +102,11 @@ public class MemberService {
 
         if (age != null ){
             member.setAge(age);
+            memberRepository.save(member);
 
 
         }
+
     }
     public void updatePhoneNumber (Integer id , String phoneNumber ){
         if (id == null || id <= 0) {
@@ -109,11 +117,11 @@ public class MemberService {
         if (phoneNumber != null && !phoneNumber.isEmpty() ){
             member.setPhoneNumber(phoneNumber);
 
+            memberRepository.save(member);
 
         }
+
     }
-
-
 
 
 
