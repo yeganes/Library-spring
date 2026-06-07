@@ -1,11 +1,10 @@
-package com.library.dao;
+package com.library.repository;
 
 
 
 import com.library.entity.Book;
 import com.library.entity.Borrow;
 import com.library.entity.Member;
-import com.library.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

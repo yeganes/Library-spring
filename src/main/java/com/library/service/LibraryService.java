@@ -5,10 +5,11 @@ import com.library.exceptions.MemberNotFoundException;
 import com.library.entity.Book;
 import com.library.entity.Borrow;
 import com.library.entity.Member;
-import com.library.dao.BookDAO;
-import com.library.dao.BorrowDAO;
-import com.library.dao.MemberDAO;
+import com.library.repository.BookDAO;
+import com.library.repository.BorrowDAO;
+import com.library.repository.MemberDAO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -18,16 +19,13 @@ public class LibraryService {
     private final MemberService memberService;
     private final BookDAO bookDAO;
     private final BorrowDAO borrowDAO;
-    private final MemberDAO memberDAO;
-    public LibraryService(BookService bookService, MemberService memberService, BookDAO bookDAO, BorrowDAO borrowDAO, MemberDAO memberDAO){
+    public LibraryService(BookService bookService, MemberService memberService, BookDAO bookDAO, BorrowDAO borrowDAO){
         this.bookService = bookService;
         this.memberService = memberService;
         this.bookDAO = bookDAO;
         this.borrowDAO = borrowDAO;
-        this.memberDAO = memberDAO;
-
     }
-
+    @Transactional
     public void borrow(int memberId, int bookId ) throws LimitBorrowedException, MemberNotFoundException {
 
 
@@ -47,8 +45,6 @@ public class LibraryService {
 
 
             borrowDAO.insert(member , book);
-            memberDAO.updateLimit(memberId , member.getBorrowLimit());
-            memberDAO.updateBorrowedBooksNum(memberId , member.getBorrowedBooksNum());
             bookDAO.updateStock(bookId , book.getBookStock());
             System.out.println("the book is borrowed");
 
@@ -62,7 +58,7 @@ public class LibraryService {
         }
     }
 
-
+    @Transactional
     public void returnBook (int memberId , int bookId) throws MemberNotFoundException {
 
         Member member = memberService.readMemberById(memberId);
@@ -80,9 +76,6 @@ public class LibraryService {
         if (!book.isAvailable()) {
             book.setAvailable(true);
         }
-        memberDAO.updateLimit(memberId , member.getBorrowLimit());
-
-        memberDAO.updateBorrowedBooksNum(memberId , member.getBorrowedBooksNum());
 
         bookDAO.updateStock(bookId , book.getBookStock());
         for(Borrow borrow : borrowList){

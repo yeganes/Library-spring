@@ -1,14 +1,14 @@
 package com.library.service;
 
 
-import com.library.dao.BorrowDAO;
-import com.library.entity.Book;
 import com.library.exceptions.MemberNotFoundException;
 import com.library.entity.Member;
-import com.library.dao.MemberDAO;
+
+import com.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,8 @@ import java.util.List;
 
 @Service
 public class MemberService {
-    private final MemberDAO memberDAO;
+
+    private final MemberRepository memberRepository;
 
     Member person = null;
     public static ArrayList<Member> listPerson = new ArrayList<>();
@@ -26,8 +27,8 @@ public class MemberService {
     public static Integer borrowedBooks = 0;
     public static boolean isActive = true;
 
-    public MemberService(MemberDAO memberDAO) {
-        this.memberDAO = memberDAO;
+    public MemberService( MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     public Member create(String inputName , int inputAge , String inputPhoneNumber , Member.Gender gender) throws IOException {
@@ -39,14 +40,12 @@ public class MemberService {
         if (inputAge <= 0) {
             throw new IllegalArgumentException(" Age must be positive");
         }
-        int id = 0 ;
-        id ++;
 
         person = new Member( inputName, inputAge, inputPhoneNumber, gender,borrowLimit , borrowedBooks , isActive);
 
         listPerson.add(person);
 
-        memberDAO.save(person);
+        memberRepository.save(person);
 
         return  person;
     }
@@ -55,7 +54,7 @@ public class MemberService {
         if (member == null || member.isEmpty()) {
             throw new IllegalArgumentException("Search name cannot be null or empty");
         }
-        List<Member> a = memberDAO.selectByName(member);
+        List<Member> a = memberRepository.findByNameContaining(member);
         Member result = null;
         for (Member m : a){
             if (member.equalsIgnoreCase(m.getName())){
@@ -65,63 +64,74 @@ public class MemberService {
         }
         return result;
     }
+    public List<Member> readAllMembers(){
+        return memberRepository.findAll();
+    }
+
     public Member readMemberById(Integer id) throws RuntimeException , MemberNotFoundException {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Invalid member ID");
         }
-        return memberDAO.select(id);
+        return memberRepository.findMemberByMemberId(id);
 
     }
 
-
-    public Member update(Integer id , String name , String phoneNumber , Integer age ) throws MemberNotFoundException {
+    public void updateName (Integer id , String name){
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Invalid member ID");
         }
-
-        Member m = readMemberById(id);
-
-        if (m==null){
-            return null;
-        }
+        Member member = memberRepository.findMemberByMemberId(id);
 
         if (name != null && !name.isEmpty()){
-            m.setName(name);
-            memberDAO.updateName(id , name);
-        }
-        if (phoneNumber != null && !phoneNumber.isEmpty()){
-            m.setPhoneNumber(phoneNumber);
-            memberDAO.updatePhoneNumber(id , phoneNumber);
-        }
+            member.setName(name);
 
-        if (age != null  ){
 
-            m.setAge(age);
-            memberDAO.updateAge(id , age);
         }
-        return m;
+    }
+    public void updateAge (Integer id , Integer age ){
+        if (id == null || id <= 0) {
+        throw new IllegalArgumentException("Invalid member ID");
+    }
+        Member member = memberRepository.findMemberByMemberId(id);
+
+        if (age != null ){
+            member.setAge(age);
+
+
+        }
+    }
+    public void updatePhoneNumber (Integer id , String phoneNumber ){
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid member ID");
+        }
+        Member member = memberRepository.findMemberByMemberId(id);
+
+        if (phoneNumber != null && !phoneNumber.isEmpty() ){
+            member.setPhoneNumber(phoneNumber);
+
+
+        }
     }
 
 
 
-    public Member delete(int enteredId , int number) throws MemberNotFoundException {
+
+
+    public void delete(int enteredId , int number) throws MemberNotFoundException {
         if (enteredId <= 0) {
             throw new IllegalArgumentException("Invalid member ID");
         }
 
         Member m = readMemberById(enteredId);
-        if (m == null){
-            return null;
-        }
-        else {
             if (number == 1 ){
-                memberDAO.delete(enteredId);
+                Member member = memberRepository.findMemberByMemberId(enteredId);
+                member.setActive(false);
+                member.setDeletedAt(LocalDateTime.now());
+                memberRepository.save(member);
 
-            } else if (number == 2 ) {
-                return m;
-            }
         }
-        return person;
+
+
     }
 
 

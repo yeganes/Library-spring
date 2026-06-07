@@ -1,9 +1,8 @@
 package com.library.uI;
-import com.library.dao.BookDAO;
+import com.library.repository.BookDAO;
 import com.library.exceptions.LimitBorrowedException;
 import com.library.exceptions.MemberNotFoundException;
-import com.library.dao.BorrowDAO;
-import com.library.dao.MemberDAO;
+import com.library.repository.BorrowDAO;
 import com.library.service.BookService;
 import com.library.service.LibraryService;
 import com.library.service.MemberService;
@@ -21,7 +20,6 @@ public class MemberMenu {
 
     private final MemberService memberService ;
     private final BookDAO bookDAO;
-    MemberDAO memberDAO = new MemberDAO();
     static Scanner input = new Scanner(System.in);
     private final BookService bookService;
     private final BorrowDAO borrowDAO;
@@ -167,9 +165,9 @@ public class MemberMenu {
                             }
                             break;
                         case 3 :
-                            List<Member> a =  memberDAO.selectAllMembers();
-                            for (Member m  : a){
-                                System.out.println(m);
+                            List<Member> allMembers =  memberService.readAllMembers();
+                            for (Member member  : allMembers){
+                                System.out.println(member);
                             }
                             break;
                     }
@@ -190,8 +188,10 @@ public class MemberMenu {
                     System.out.println(m.getAge());
                     Integer age = Integer.parseInt(input.nextLine());
 
+                    memberService.updateName(enteredId , name);
+                    memberService.updateAge(enteredId , age);
+                    memberService.updatePhoneNumber(enteredId , phoneNumber);
 
-                    memberService.update(enteredId , name , phoneNumber , age);
 
 
                     break;

@@ -134,7 +134,7 @@ public class Member {
         return borrows;
     }
 
-    @Column
+    @Column(name = "deleted_at")
     public LocalDateTime getDeletedAt() {
         return deletedAt;
     }

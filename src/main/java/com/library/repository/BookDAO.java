@@ -1,9 +1,7 @@
-package com.library.dao;
+package com.library.repository;
 
 import com.library.entity.Book;
-import com.library.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -16,8 +14,6 @@ public class BookDAO {
         System.out.println("Repository called");
     }
 
-    SessionFactory sessionFactory =
-            HibernateUtil.getSessionFactory();
 
 
 
