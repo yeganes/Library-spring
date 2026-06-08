@@ -16,6 +16,9 @@ public interface MemberRepository extends JpaRepository<Member , Integer> {
 
      Member findMemberByMemberId(int id);
 
+    List<Member> findByActiveTrue();
+
+    List<Member> findByActiveFalse();
 
 
 

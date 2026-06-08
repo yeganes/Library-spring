@@ -121,7 +121,7 @@ public class MemberMenu {
                     break;
                 case 2:
                     System.out.println("you selected number 2 , let's read the member");
-                    System.out.println(" 1. search by name \n 2. search by id \n 3. read all the members");
+                    System.out.println(" 1. search by name \n 2. search by id \n 3. read all the members \n 4.read deleted members");
                     int searchBy = Integer.parseInt(input.nextLine());
                     switch(searchBy){
                         case 1 :
@@ -163,9 +163,23 @@ public class MemberMenu {
                             }
                             break;
                         case 3 :
-                            List<Member> allMembers =  memberService.readAllMembers();
+                            List<Member> allMembers =  memberService.findActiveMember();
+                            if (allMembers.isEmpty()){
+                                System.out.println("No members found");
+                            }else{
                             for (Member member  : allMembers){
                                 System.out.println(member);
+                            }
+                            }
+                            break;
+                            case 4 :
+                            List<Member> allDeletedMembers =  memberService.readDeletedMembers();
+                            if (allDeletedMembers.isEmpty()){
+                                System.out.println("No members have been deleted");
+                            }else{
+                            for (Member member  : allDeletedMembers){
+                                System.out.println(member);
+                            }
                             }
                             break;
                     }
@@ -254,7 +268,7 @@ public class MemberMenu {
 
                         int bookId = Integer.parseInt(input.nextLine());
                         Book book = bookService.findById(bookId);
-                        List<Borrow> borrowList = borrowRepository.selectMemberBook(member ,book );
+                        List<Borrow> borrowList = borrowRepository.findBorrowByBookAndMember(book ,member );
 
                         System.out.println(borrowList);
 

@@ -59,6 +59,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     public Integer getMemberId() {
         return memberId;
     }

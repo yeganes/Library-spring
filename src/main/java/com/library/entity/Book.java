@@ -76,7 +76,7 @@ public class Book {
     public void setAuthor(String author) {
         this.author = author;
     }
-
+    @Column(name = "total_pages")
     public int getTotalPages() {
         return totalPages;
     }
@@ -92,7 +92,7 @@ public class Book {
     public void setAvailable(boolean available) {
         this.available = available;
     }
-
+    @Column(name = "book_stock")
     public int getBookStock() {
         return bookStock;
     }

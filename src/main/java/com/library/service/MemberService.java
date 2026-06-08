@@ -123,6 +123,13 @@ public class MemberService {
 
     }
 
+    public List<Member> findActiveMember(){
+        return memberRepository.findByActiveTrue();
+    }
+    public List<Member> readDeletedMembers(){
+        return memberRepository.findByActiveFalse();
+    }
+
 
 
     public void delete(int enteredId , int number) throws MemberNotFoundException {

@@ -21,7 +21,7 @@ public class LibraryService {
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
 
-    public LibraryService(BookService bookService, MemberService memberService, BorrowRepository borrowRepository , MemberRepository memberRepository , BookRepository bookRepository, com.library.service.BookRepository bookRepository){
+    public LibraryService(BookService bookService, MemberService memberService, BorrowRepository borrowRepository , MemberRepository memberRepository , BookRepository bookRepository){
         this.bookService = bookService;
         this.memberService = memberService;
         this.borrowRepository = borrowRepository;
@@ -46,9 +46,6 @@ public class LibraryService {
 
             book.setBookStock(book.getBookStock()-1);
 
-
-
-
             memberRepository.save(member);
             bookRepository.save(book);
 
@@ -69,7 +66,7 @@ public class LibraryService {
 
         Member member = memberService.readMemberById(memberId);
         Book book = bookService.findById(bookId);
-        List<Borrow> borrowList = borrowRepository.selectMemberBook(member , book);
+        List<Borrow> borrowList = borrowRepository.findBorrowByBookAndMember(book , member);
 
 
 
@@ -83,7 +80,7 @@ public class LibraryService {
             book.setAvailable(true);
         }
         for(Borrow borrow : borrowList){
-            borrowRepository.returnBook(borrow.getBorrowId());
+            borrowRepository.findById(borrow.getBorrowId());
         }
 
         memberRepository.save(member);

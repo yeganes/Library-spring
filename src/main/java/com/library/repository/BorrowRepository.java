@@ -22,38 +22,7 @@ public interface BorrowRepository extends JpaRepository<Borrow , Integer> {
     List<Borrow> findBorrowByBookAndMember(Book book, Member member);
 
 
-    public List<Borrow> findByMember(Member member ){
-        Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
-
-        try {
-            Query<Borrow> borrowQuery = session.createQuery("FROM Borrow b\n" +
-                    "JOIN FETCH b.book\n" +
-                    "WHERE b.member = :member", Borrow.class);
-
-            borrowQuery.setParameter("member", member);
-
-
-            List<Borrow> list = borrowQuery.list();
-            tx.commit();
-            return list;
-        } catch (Exception e) {
-            tx.rollback();
-            throw e;
-        }
-    }
-
-
-    public void returnBook(Integer borrowId){
-        Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        Borrow borrow =  session.get(Borrow.class, borrowId);
-        borrow.setReturnDate(LocalDateTime.now());
-        tx.commit();
-
-
-    }
+    List<Borrow> findByMember(Member member);
 
 
 }
