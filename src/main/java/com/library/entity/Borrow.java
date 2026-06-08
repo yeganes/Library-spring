@@ -56,7 +56,7 @@ public class Borrow {
     public void setBorrowDate(LocalDateTime borrowDate) {
         this.borrowDate = borrowDate;
     }
-
+    @Column(nullable = true)
     public LocalDateTime getReturnDate() {
         return returnDate;
     }
@@ -70,10 +70,10 @@ public class Borrow {
     public String toString() {
         return "Borrow{" +
                 "borrowId=" + borrowId +
-                ", book=" + book +
-                ", member=" + member +
-                ", borrowDate=" + borrowDate+
-                ",returnDate=" + returnDate+
+                ", bookId=" + (book != null ? book.getId() : null) +
+                ", memberId=" + (member != null ? member.getMemberId() : null) +
+                ", borrowDate=" + borrowDate +
+                ", returnDate=" + returnDate +
                 '}';
     }
 }

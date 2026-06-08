@@ -84,7 +84,7 @@ public class Book {
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
-
+    @Column(name = "isAvailable")
     public boolean isAvailable() {
         return available;
     }

@@ -11,6 +11,7 @@ import com.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class LibraryService {
@@ -46,8 +47,16 @@ public class LibraryService {
 
             book.setBookStock(book.getBookStock()-1);
 
+
             memberRepository.save(member);
             bookRepository.save(book);
+
+
+            Borrow borrow = new Borrow();
+            borrow.setMember(member);
+            borrow.setBook(book);
+            borrow.setBorrowDate(LocalDateTime.now());
+            borrowRepository.save(borrow);
 
             System.out.println("the book is borrowed");
 
@@ -85,6 +94,13 @@ public class LibraryService {
 
         memberRepository.save(member);
         bookRepository.save(book);
+
+        Borrow borrow = new Borrow();
+        borrow.setMember(member);
+        borrow.setBook(book);
+        borrow.setReturnDate(LocalDateTime.now());
+        borrowRepository.save(borrow);
+
     }
 
 }
